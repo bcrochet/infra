@@ -1,0 +1,5 @@
+service_name: mariadb
+image: docker.io/library/mariadb:latest
+data_directory: /srv/data
+enabled: true
+state: started

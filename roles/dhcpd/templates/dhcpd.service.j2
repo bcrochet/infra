@@ -1,0 +1,21 @@
+[Unit]
+Description={{ service_name }} Podman Container
+After=network-online.target
+Wants=network.target
+
+[Service]
+Type=simple
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/podman kill "{{ service_name }}"
+ExecStartPre=-/usr/bin/podman rm "{{ service_name }}"
+# ExecStartPre=-/usr/bin/podman pull "{{ image }}"
+ExecStart=/usr/bin/podman run --name="{{ service_name }}" --init -v {{ data_directory }}:/data --dns 127.0.0.1 --dns 1.1.1.1 --privileged --network host {{ image }} {{ interface }}
+
+ExecReload=-/usr/bin/podman stop "{{ service_name }}"
+ExecReload=-/usr/bin/podman rm "{{ service_name }}"
+ExecStop=-/usr/bin/podman stop "{{ service_name }}"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

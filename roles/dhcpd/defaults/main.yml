@@ -1,0 +1,18 @@
+image: "quay.io/bcrochet/docker-dhcpd:latest"
+service_name: dhcpd
+interface: "eth0"
+enabled: true
+state: started
+routers:
+- 192.168.1.1
+nameservers:
+- 192.168.1.200
+- 192.168.3.1
+domain_name: "crochet.net"
+data_directory: "/srv/dhcpd"
+repo_path: "/tmp/checkout/dhcpd"
+ranges:
+- start: 192.168.1.2
+  end: 192.168.1.191
+- start: 192.168.1.208
+  end: 192.168.1.240

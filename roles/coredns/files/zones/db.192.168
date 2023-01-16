@@ -1,0 +1,31 @@
+$TTL	604800
+168.192.in-addr.arpa.	IN	SOA	ns1.crochet.net.	admin.crochet.net. (
+		2022020101	; Serial
+		604800		; Refresh
+		86400		; Retry
+		2419200		; Expire
+		604800 )	; Negative Cache TTL
+;
+
+; name servers - NS records
+@	IN	NS	ns1.crochet.net.
+
+; PTR records
+7.1.168.192.in-addr.arpa.	6230	IN	PTR	homeassistant.crochet.net.
+7.1.168.192.in-addr.arpa.	6230	IN	PTR	ha.crochet.net.
+11.1.168.192.in-addr.arpa.	6230	IN	PTR	ns1.crochet.net.
+12.1.168.192.in-addr.arpa.	6230	IN	PTR	ns2.crochet.net.
+36.1.168.192.in-addr.arpa.	6230	IN	PTR	teckin-strip-01.crochet.net.
+50.1.168.192.in-addr.arpa.	6230	IN	PTR	test01.crochet.net.
+51.1.168.192.in-addr.arpa.	6230	IN	PTR	test02.crochet.net.
+51.1.168.192.in-addr.arpa.	6230	IN	PTR	api.bpc-sno.crochet.net.
+51.1.168.192.in-addr.arpa.	6230	IN	PTR	api-int.bpc-sno.crochet.net.
+51.1.168.192.in-addr.arpa.	6230	IN	PTR	bootstrap.bpc-sno.crochet.net.
+51.1.168.192.in-addr.arpa.	6230	IN	PTR	master0.bpc-sno.crochet.net.
+64.1.168.192.in-addr.arpa.	6230	IN	PTR	pi400.crochet.net.
+130.1.168.192.in-addr.arpa.	6230	IN	PTR	nas.crochet.net.
+157.1.168.192.in-addr.arpa.	6230	IN	PTR	prefect.crochet.net.
+157.1.168.192.in-addr.arpa.	6230	IN	PTR	plex.crochet.net.
+157.1.168.192.in-addr.arpa.	6230	IN	PTR	crochet.net.
+158.1.168.192.in-addr.arpa.	6230	IN	PTR	dent.crochet.net.
+158.1.168.192.in-addr.arpa.	6230	IN	PTR	ipa.crochet.net.

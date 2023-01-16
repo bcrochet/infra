@@ -1,0 +1,18 @@
+---
+- name: Install podman
+  ansible.builtin.package:
+    name: podman
+    state: present
+  become: true
+
+- name: Login to docker.io
+  containers.podman.podman_login:
+    username: "{{ docker_io_username }}"
+    password: "{{ docker_io_password }}"
+    registry: docker.io
+    authfile: /etc/containers/auth.json
+  become: true
+
+- name: Create pod if defined
+  include_tasks: pod_create.yml
+  when: service_pod is defined

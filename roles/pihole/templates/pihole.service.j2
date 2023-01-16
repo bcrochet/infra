@@ -1,0 +1,21 @@
+[Unit]
+Description={{ service_name }} Podman Container
+After=network-online.target
+Wants=network.target
+
+[Service]
+Type=simple
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/podman kill "{{ service_name }}"
+ExecStartPre=-/usr/bin/podman rm "{{ service_name }}"
+ExecStartPre=-/usr/bin/podman pull "{{ image }}"
+ExecStart=/usr/bin/podman run --name="{{ service_name }}" -v {{ data_directory }}/pihole:/etc/pihole -v {{ data_directory }}/dnsmasq:/etc/dnsmasq.d -v {{ data_directory }}/etc/hosts:/etc/hosts:ro --cap-add NET_ADMIN --env-file {{ data_directory }}/.env --dns 127.0.0.1 --dns 1.1.1.1 -p "53:53/tcp" -p "53:53/udp" -p "80:80/tcp" -p "443:443/tcp" -p "67/udp" --network piholenet --ip {{ pihole_ip }} --ip6 {{ pihole_ipv6 }} {{ image }}
+
+ExecReload=-/usr/bin/podman stop "{{ service_name }}"
+ExecReload=-/usr/bin/podman rm "{{ service_name }}"
+ExecStop=-/usr/bin/podman stop "{{ service_name }}"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

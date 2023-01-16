@@ -1,0 +1,3 @@
+service_name: wordpress
+data_directory: /srv/data
+image: docker.io/library/wordpress:6-fpm-alpine

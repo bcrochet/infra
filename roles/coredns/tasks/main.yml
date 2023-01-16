@@ -1,0 +1,49 @@
+---
+- name: Add service file
+  template:
+    src: coredns.service.j2
+    dest: /etc/systemd/system/coredns.service
+    mode: 0644
+    owner: root
+    group: root
+  become: true
+- name: Set up data directory
+  ansible.builtin.file:
+    path: "{{ data_directory }}"
+    state: directory
+  become: true
+- name: Create config file
+  ansible.builtin.template:
+    src: Corefile.j2
+    dest: "{{ data_directory }}/Corefile"
+  notify: Restart coredns
+  become: true
+- name: Copy zone files
+  ansible.builtin.template:
+    src: zone.j2
+    dest: "{{ data_directory }}/zones/db.{{ item.name }}"
+  loop: "{{ zones }}"
+  become: true
+- name: Copy reverse zone files
+  ansible.builtin.template:
+    src: reverse_zone.j2
+    dest: "{{ data_directory }}/zones/db."
+  loop: "{{ zones }}"
+  become: true
+- name: Install service
+  ansible.builtin.template:
+    src: coredns.service.j2
+    dest: /etc/systemd/system/coredns.service
+  register: service_file
+  become: true
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: service_file is succeeded
+  become: true
+- name: Enable service
+  ansible.builtin.systemd:
+    name: coredns
+    enabled: "{{ enabled }}"
+    state: "{{ state }}"
+  become: true

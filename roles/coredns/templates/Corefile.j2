@@ -1,0 +1,36 @@
+crochet.net:53 {
+    log . {combined} {
+        class denial error
+    }
+    errors
+    reload 10s
+    forward . 192.168.1.199:53 {
+        except crochet.net
+    }
+    file /etc/coredns/zones/db.crochet.net crochet.net
+}
+
+192.168.0.0/16 {
+    file /etc/coredns/zones/db.192.168 168.192.in-addr.arpa
+}
+
+testing:53 {
+    log . {combined} {
+        class denial error
+    }
+    errors
+    reload 10s
+    forward . 192.168.1.199:53 {
+        except testing
+    }
+    file /etc/coredns/zones/db.testing testing
+}
+
+.:53 {
+    log . {combined} {
+        class denial error
+    }
+    errors
+    cache
+    forward . 192.168.1.199:53
+}

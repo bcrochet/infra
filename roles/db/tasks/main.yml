@@ -1,0 +1,35 @@
+---
+- name: Set up data directories
+  ansible.builtin.file:
+    path: "{{ data_directory }}/{{ service_name }}/{{ item }}"
+    state: directory
+  loop:
+  - db
+  - backup
+  become: true
+- name: Add env file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ data_directory }}/{{ service_name }}/.env"
+    mode: 0600
+  become: true
+- name: Install service
+  ansible.builtin.template:
+    src: "{{ service_name }}.service.j2"
+    dest: /etc/systemd/system/{{ service_name }}.service
+    mode: 0644
+    owner: root
+    group: root
+  register: service_file
+  become: true
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: service_file is succeeded
+  become: true
+- name: Enable service
+  ansible.builtin.systemd:
+    name: "{{ service_name }}"
+    enabled: "{{ enabled }}"
+    state: "{{ state }}"
+  become: true

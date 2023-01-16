@@ -1,0 +1,25 @@
+{
+  "cniVersion": "0.4.0",
+  "name": "piholenet",
+  "plugins": [
+    {
+      "type": "macvlan",
+      "mode": "bridge",
+      "master": "eth0",
+      "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{
+            "subnet": "192.168.0.0/20",
+            "rangeStart": "{{ cni_range }}.0",
+            "rangeEnd": "{{ cni_range }}.254",
+            "gateway": "192.168.1.1"
+          }]
+        ],
+        "routes": [
+          {"dst": "0.0.0.0/0"}
+        ]
+      }
+    }
+  ]
+}

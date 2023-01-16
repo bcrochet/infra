@@ -1,0 +1,13 @@
+---
+- name: Create pod
+  containers.podman.podman_pod:
+    name: "{{ service_pod }}"
+    state: started
+    ports:
+    - "80:80"
+    - "443:443"
+    generate_systemd:
+      new: true
+      path: /etc/systemd/system
+    label:
+      app: wordpress

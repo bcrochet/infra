@@ -1,0 +1,6 @@
+service_name: coredns
+image: docker.io/coredns/coredns:latest
+data_directory: /srv/coredns
+repo_path: "/tmp/checkout/coredns"
+enabled: true
+state: started

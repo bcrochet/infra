@@ -1,0 +1,5 @@
+enabled: false
+state: stopped
+image: pihole/pihole:latest
+data_directory: /srv/pihole
+pihole_maxdbdays: 90

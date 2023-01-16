@@ -1,0 +1,28 @@
+$TTL	604800
+@	IN	SOA	{{ zone.nameservers[0] }}.{{ zone.name }} admin.{{ zone.name }} (
+		2020041902	; Serial
+		604800		; Refresh
+		86400		; Retry
+		2419200		; Expire
+		604800 )	; Negative Cache TTL
+;
+; name servers - NS records
+@	IN	NS	ns1
+@	IN	NS	ns2
+
+; name servers - A records
+{% for nameserver in zone.nameservers %}
+{{ nameserver.name }}.{{ name }}.   IN  A   {{ nameserver.ip_address }}
+{% endfor %}
+
+{% for record in zone.records %}
+; {{ record.type }} records
+{% for host in record.hosts %}
+{{ host.name }}.{{ zone.name }}    IN  {{ record.type }}   {{ host.ip_address }}
+{% endfor %}
+{% endfor %}
+
+; CNAMEs
+{% for cname in zone.cnames %}
+{{ cname.host }}.{{ zone.name }}.   IN  CNAME   {{ cname.target }}.{{ zone.name }}.
+{% endfor %}

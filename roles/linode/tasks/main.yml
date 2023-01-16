@@ -1,0 +1,18 @@
+---
+- name: Deploy terraform
+  environment:
+    LINODE_TOKEN: "{{ linode_token }}"
+    LINODE_API_VERSION: "v4beta"
+  block:
+    - name: Initialize Terraform Provider
+      community.general.terraform:
+        project_path: 'project/'
+        state: absent
+        force_init: true
+    
+    - name: Deploy Terraform Instance
+      community.general.terraform:
+        project_path: 'project/'
+        state: present
+      register: deployed_tf
+

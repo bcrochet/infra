@@ -1,0 +1,21 @@
+[Unit]
+Description={{ service_name }} Podman Container
+After=network-online.target
+Wants=network.target
+
+[Service]
+Type=simple
+TimeoutStartSec=5m
+ExecStartPre=-/usr/bin/podman kill "{{ service_name }}"
+ExecStartPre=-/usr/bin/podman rm "{{ service_name }}"
+ExecStartPre=-/usr/bin/podman pull "{{ image }}"
+ExecStart=/usr/bin/podman run --name="{{ service_name }}" {% if service_pod is defined %}--pod {{ service_pod }}{% else %}-p 3306:3306/tcp{% endif %} --env-file "{{ data_directory }}/{{ service_name }}/.env" -e MYSQL_DATABASE={{ database_name }} -v {{ data_directory }}/{{ service_name }}/db:/var/lib/mysql:z -v {{ data_directory }}/{{ service_name }}/backup:/var/mariadb/backup:z {{ image }} --default-authentication-plugin=mysql_native_password
+
+ExecReload=-/usr/bin/podman stop "{{ service_name }}"
+ExecReload=-/usr/bin/podman rm "{{ service_name }}"
+ExecStop=-/usr/bin/podman stop "{{ service_name }}"
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,95 @@
+---
+- hosts: localhost
+  roles:
+  - role: linode
+    vars:
+      linode_token: "{{ linode_token }}"
+- hosts: piholeservers
+  roles:
+  - role: base
+    tags:
+    - base
+  - role: cni
+    tags:
+    - cni
+  - role: podman
+    tags:
+    - podman
+  - role: dhcpd
+    vars:
+      peer_tier: "{{ dhcp_peer_tier }}"
+      peer_addr: "{{ hostvars[dhcp_peer]['ansible_default_ipv4']['address']|default('disabled') }}"
+      peer_port: "{{ dhcp_peer_port }}"
+      partner_port: "{{ dhcp_partner_port }}"
+    tags:
+    - dhcpd
+  - role: coredns
+    tags:
+    - coredns
+  - role: pihole
+    vars:
+      pihole_vhost: "{{ inventory_hostname }}"
+    tags:
+    - pihole
+  tags:
+  - pihole
+
+- name: WordPress - base
+  hosts: wordpress
+  remote_user: root
+  roles:
+  - role: base
+    tags: base
+
+  tasks:
+  - name: Ensure firewalld
+    ansible.builtin.package:
+      name: "{{ item }}"
+      state: latest
+    loop:
+    - firewalld
+
+  - name: Enable strict firewall
+    ansible.posix.firewalld:
+      permanent: yes
+      state: enabled
+      zone: external
+      service: "{{ item }}"
+    loop:
+    - http
+    - https
+    - ssh
+  tags:
+  - wordpress
+
+- name: WordPress
+  hosts: wordpress
+  roles:
+  - role: podman
+    vars:
+      service_pod: "wordpress_pod"
+    tags:
+    - podman
+  - role: db
+    vars:
+      service_pod: "wordpress_pod"
+      database_name: "{{ database_name }}"
+      database_user: "{{ database_user }}"
+      database_password: "{{ database_password }}"
+      database_root_password: "{{ database_root_password }}"
+      database_host: "{{ database_host }}"
+    tags:
+    - db
+  - role: wordpress
+    vars:
+      service_pod: "wordpress_pod"
+      envvars: "{{ wordpress_envvars }}"
+    tags:
+    - wordpress
+  - role: caddy
+    vars:
+      service_pod: "wordpress_pod"
+    tags:
+    - caddy
+  tags:
+  - wordpress

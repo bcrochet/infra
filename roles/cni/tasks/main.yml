@@ -1,0 +1,9 @@
+---
+- name: Deploy pihole podman network
+  template:
+    src: 90-piholenet.conflist.j2
+    dest: /etc/cni/net.d/90-piholenet.conflist
+    mode: 0644
+    owner: root
+    group: root
+  become: true

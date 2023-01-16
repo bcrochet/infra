@@ -1,0 +1,91 @@
+---
+- name: Set timezone
+  community.general.timezone:
+    hwclock: UTC
+    name: America/New_York
+  become: true
+
+- name: Keep up-to-date
+  ansible.builtin.package:
+    name: "*"
+    state: latest
+  become: true
+
+- name: Add user groups
+  ansible.builtin.group:
+    name: "{{ item.username }}"
+    state: present
+    gid: "{{ item.gid | default(omit) }}"
+  loop: "{{ users }}"
+  become: true
+
+- name: Distribution
+  debug:
+    msg: "{{ansible_facts['os_family']}}"
+
+- name: Add users
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    comment: "{{ item.name }}"
+    state: present
+    uid: "{{ item.uid | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    append: true
+    groups: "{{ item.additional_groups | default(omit) }}"
+  loop: "{{users}}"
+  become: true
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Add users - Deb
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    comment: "{{ item.name }}"
+    state: present
+    uid: "{{ item.uid | default(omit) }}"
+    group: "{{ item.group | default(omit) }}"
+    append: true
+    groups: "{{ item.additional_groups_deb | default(omit) }}"
+  loop: "{{users}}"
+  become: true
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: add ssh keys
+  authorized_key:
+    user: "{{ item.0.username }}"
+    key: "{{ item.1 }}"
+  loop: "{{ users | subelements('ssh_keys') }}"
+  become: true
+
+- name: Sudo enable
+  ansible.builtin.template:
+    src: sudoer.j2
+    dest: /etc/sudoers.d/010_{{ item.username }}-nopasswd
+  loop: "{{ users }}"
+  become: true
+  
+- name: Enable extra repos on CentOS 9 Stream
+  ansible.builtin.yum_repository:
+    name: crb
+    state: present
+    enabled: true
+  when: ansible_distribution_major_version == "9"
+
+- name: Install EPEL on CentOS 9 Stream
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - epel-release
+    - epel-next-release
+  when: ansible_distribution_major_version == "9"
+
+- name: Common packages to Install
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: latest
+  loop:
+  - tmux
+  - htop
+  - tar
+  - jq
+  become: true

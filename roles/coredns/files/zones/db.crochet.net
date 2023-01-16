@@ -1,0 +1,74 @@
+$TTL	604800
+@	IN	SOA	ns1.crochet.net. admin.crochet.net (
+		2020041902	; Serial
+		604800		; Refresh
+		86400		; Retry
+		2419200		; Expire
+		604800 )	; Negative Cache TTL
+;
+; name servers - NS records
+@	IN	NS	ns1
+@	IN	NS	ns2
+
+; name servers - A records
+ns1.crochet.net.		IN	A	192.168.1.200
+ns2.crochet.net.		IN	A	192.168.3.1
+
+; 192.168.1.0/24 - A records
+dredd.crochet.net.		IN	A	192.168.1.4
+pidns1.crochet.net.		IN	A	192.168.1.11
+pidns2.crochet.net.		IN	A	192.168.1.12
+radiopi.crochet.net.		IN	A	192.168.1.20
+microshift.crochet.net.		IN	A	192.168.1.21
+teckin-strip-01.crochet.net.	IN	A	192.168.1.36
+garagedafang.crochet.net.	IN	A	192.168.1.38
+pistar.crochet.net.		IN	A	192.168.1.40
+test01.crochet.net.		IN	A	192.168.1.50
+test02.crochet.net.		IN	A	192.168.1.51
+api.bpc-sno.crochet.net.	IN	A	192.168.1.51
+api-int.bpc-sno.crochet.net.	IN	A	192.168.1.51
+*.apps.bpc-sno.crochet.net.	IN	A	192.168.1.51
+bootstrap.bpc-sno.crochet.net.	IN	A	192.168.1.51
+master0.bpc-sno.crochet.net.	IN	A	192.168.1.51
+pi400.crochet.net.		IN	A	192.168.1.64
+pixelring.crochet.net.		IN	A	192.168.1.90
+pixelmatrix.crochet.net.	IN	A	192.168.1.91
+pixelstring1.crochet.net.	IN	A	192.168.1.92
+garagemini.crochet.net.		IN	A	192.168.1.101
+bathroommini.crochet.net.	IN	A	192.168.1.108
+raspi3.crochet.net.		IN	A	192.168.1.109
+pizero2.crochet.net.		IN	A	192.168.1.110
+hpenvy.crochet.net.		IN	A	192.168.1.114
+hue.crochet.net.		IN	A	192.168.1.124
+nascli.crochet.net.		IN	A	192.168.1.130
+garagemaindoor.crochet.net.	IN	A	192.168.1.131
+gabemini.crochet.net.		IN	A	192.168.1.132
+prusa.crochet.net.		IN	A	192.168.1.133
+s8000.crochet.net.		IN	A	192.168.1.142
+lightify.crochet.net.		IN	A	192.168.1.156
+crochet.net.			IN	A	192.168.1.157
+mqtt.crochet.net.		IN	A	192.168.1.157
+prefect.crochet.net.		IN	A	192.168.1.157
+dent.crochet.net.		IN	A	192.168.1.158
+ipa.crochet.net.		IN	A	192.168.1.158
+hassio.crochet.net.		IN	A	192.168.1.232
+
+; 2605:a601:a62e:9500::/56 - AAAA records
+hassio.crochet.net.		IN	AAAA	2605:a601:a62e:9500::232
+nas.crochet.net.		IN	AAAA	2605:a601:a62e:9500::130
+prefect.crochet.net.		IN	AAAA	2605:a601:a62e:9500::157
+
+; CNAMEs
+ha.crochet.net.		IN	CNAME	prefect.crochet.net.
+plex.crochet.net.	IN	CNAME	prefect.crochet.net.
+nas.crochet.net.	IN	CNAME	prefect.crochet.net.
+newz.crochet.net.	IN	CNAME	prefect.crochet.net.
+cloud.crochet.net.	IN	CNAME	prefect.crochet.net.
+bw.crochet.net.		IN	CNAME	prefect.crochet.net.
+factorio.crochet.net.	IN	CNAME	prefect.crochet.net.
+recipes.crochet.net.	IN	CNAME	prefect.crochet.net.
+dashy.crochet.net.	IN	CNAME	prefect.crochet.net.
+registry.crochet.net.	IN	CNAME	test01.crochet.net.
+registry.microshift.crochet.net.	IN	CNAME	microshift.crochet.net.
+api.microshift.crochet.net.	IN	CNAME	microshift.crochet.net.
+*.apps.microshift.crochet.net.	IN	CNAME	microshift.crochet.net.
